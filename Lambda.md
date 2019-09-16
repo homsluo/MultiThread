@@ -1,10 +1,10 @@
-## Learning C++11 Lambda
+# Learning C++11 Lambda
 ---
- #### Valid Lambda Syntax: <br>
+ ### Valid Lambda Syntax: <br>
  ```cpp
  [](){};//[Capture List](Function Arguments){Function Body}:
  ```
- #### Defining and Calling a Lambda
+ ### Defining and Calling a Lambda
  ```cpp
  int main(){
    [](){
@@ -14,7 +14,7 @@
  return 0;
  }
  ```
- #### Lambda with a function argument
+ ### Lambda with a function argument
   ```cpp
  int main(){
    [](int value){ // Lambda taking arguments like normal funcions
@@ -24,7 +24,7 @@
  return 0;
  }
  ```
- #### Naming a Lambda (Using auto key)
+ ### Naming a Lambda (Using auto key)
  ```cpp
  int main(){
    auto mylam = [](){
@@ -40,7 +40,7 @@
    //Call the lambda funcion with parameter
    mylam(100);
    ```
- #### Naming a Lambda (Using std::fuction<>)
+ ### Naming a Lambda (Using std::fuction<>)
  ```cpp
   int main(){
     function<void(int)> mylam = [](int value){
@@ -50,7 +50,7 @@
   mylam(200);
  }
  ```
- #### Using old 'C' style function pointer
+ ### Using old 'C' style function pointer
  ```cpp
  void(*cstylefp)(int) = [](int value){
    cout << "The value in this function is ->" << value << '\n';
@@ -58,9 +58,9 @@
  //Call the function pointer
  cstylefp(300);
  ```
-#### Using Capture List
+### Using Capture List
 "[]" It captures the local scope variables to be used inside the lambda function.
-##### Captured by Value
+#### Captured by Value
 ```cpp
 int main(){
   int val = 100;  //Local variables
@@ -73,7 +73,7 @@ int main(){
   
 }
 ```
-##### Captured by Reference
+#### Captured by Reference
 ```cpp
 int main(){
   int val = 100;  //Local variables
@@ -86,7 +86,7 @@ int main(){
   
 }
 ```
-##### Captured by Value and Reference
+#### Captured by Value and Reference
 ```cpp
 int main(){
   int val = 100;  //Local variables
