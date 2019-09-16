@@ -99,7 +99,9 @@ int main(){
 }
 ```
 ## Future & Promise
-
-        Future
-        * Async Programming
-        * Without creating explicit threads
+Future:
+* Async Programming
+* Without creating explicit threads
+<br>
+Promise:
+* Contains a Future
