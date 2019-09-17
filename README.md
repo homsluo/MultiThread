@@ -101,7 +101,72 @@ int main(){
 ## Future & Promise
 Future:
 * Async Programming
-* Without creating explicit threads
-<br>
+* Without creating explicit threads <br><br>
 Promise:
 * Contains a Future
+#### Future
+```cpp
+#include<future>
+int asyncFunc(int value){
+    cout << "Async Thread =>" << this_thread::get_id()<< '\n';
+    cout << "I am inside a async..." << '\n';
+    
+    return value + 1000;
+}
+
+int main(){
+    cout << "Main Thread =>" << this_thread::get_id() << '\n';
+    future<int> fn = async(launch::async, asyncFunc, 200); //launch::async launch the function in async ways
+
+    if(fn.valid()) //Gate can only get once, check if the return value has already got
+        cout << fn.get() << '\n'; 
+    
+    if(fn.valid())
+        cout << fn.get() << '\n';
+    else
+        cout << "Invalid gate" << '\n';
+    return 0;
+}
+```
+Using 'launch::async' means call the function asynchronous. <br>
+Using 'launch::deffered' means call the function when we call the gate, means function works in the same thread with main funcion.
+#### Promise
+![](https://thispointer.com/wp-content/uploads/2015/06/promise.png)
+```cpp
+void ThrdFunc(promise<int>& prom){ // In the thread function, set the value in promise
+    this_thread::sleep_for(chrono::seconds(2));
+    prom.set_value(200);
+}
+
+int main(){
+    promise<int> mypromise;  //Create a promise 
+    future<int> fut = mypromise.get_future();   //Create a future in that promise
+    cout << "Main..." << '\n';
+    thread t1 {ThrdFunc, ref(mypromise)}; // Pass the promise to the Thread t1(the second thread) funcion.
+
+    cout << "Main Thread =>" << fut.get() << '\n'; // Call the future(Call thread function to return value)
+    t1.join();
+    return 0;
+}
+```
+## Mutex(Mutual Exclusion)
+```cpp
+#include<mutex>
+void ThreadFn( mutex & mtx){
+    lock_guard<mutex> lock(mtx);
+    cout << "I locked the Mutex..." << '\n';
+    this_thread::sleep_for(chrono::seconds(5)); // Lock for 5 seconds
+}
+
+int main(){
+    mutex mtx; //Create a mutex
+    thread th { ThreadFn, ref(mtx)}; //Pass the mutex to thread function by reference   
+    this_thread::sleep_for(chrono::seconds(1)); // Wait for the thread function to lock
+    unique_lock<mutex> lock(mtx); //Wait till the thread function unlock the mutex
+    cout << "I am inside the Main Thread..." << '\n';
+
+    th.join();
+    return 0;
+}
+```
+Noted that 'lock_guard' can only lock, while 'unique_lock' can lock 'lock.lock()' and unlock 'lock.unlock()'.
