@@ -170,3 +170,27 @@ int main(){
 }
 ```
 Noted that 'lock_guard' can only lock, while 'unique_lock' can lock 'lock.lock()' and unlock 'lock.unlock()'.
+## Condition Variables
+```cpp
+void ThrdFn(mutex & mtx, condition_variable & convar){
+    unique_lock<mutex> lock(mtx);
+    convar.wait(lock); // Compare  with wating for some boolean become true(take 100% CPU), this take 0% and this will unlock the mutex
+    ///....
+    cout << "End of the thread.." << '\n';
+}
+
+int main(){
+    mutex mtx;
+    condition_variable convar; // Create the condition variable
+    thread th{ ThrdFn, ref(mtx), ref(convar)};
+    this_thread::sleep_for(chrono::seconds(5)); // While main thread sleep, lock the ThrdFn thread.
+
+    {
+        lock_guard<mutex> lg(mtx); // Because convar.wait(lock) unlock the mutex, here we can lock the mutex
+        convar.notify_all(); // Notify the convar nolonger wait
+    }
+
+    th.join();
+    cout << "End of Code.." << '\n';
+}
+```
